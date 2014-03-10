@@ -12,31 +12,31 @@
 
 class Context {
 public:
-    typedef std::map<std::string, std::string>::iterator ParamIterator;
+    typedef std::map<std::string, std::string>::const_iterator ParamIterator;
     static Context *getInstance();
-    void Init(int argc, char *argv[]);
+    void init(int argc, char *argv[]);
 
-    std::string GetLuaFilePath() const {
+    std::string getLuaFilePath() const {
         return _luaFile;
     }
 
-    std::string GetInputFilePath() const {
+    std::string getInputFilePath() const {
         return _inFile;
     }
 
-    std::string GetOutputFilePath() const {
+    std::string getOutputFilePath() const {
         return _outFile;
     }
 
-    ParamIterator GetParamsBegin() {
+    ParamIterator getParamsBegin() const {
         return _params.begin();
     }
 
-    ParamIterator GetParamsEnd() {
+    ParamIterator getParamsEnd() const {
         return _params.end();
     }
 
-    std::string GetSeparator() const {
+    std::string getSeparator() const {
         return _separator;
     }
 protected:

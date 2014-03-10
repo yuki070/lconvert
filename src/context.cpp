@@ -16,7 +16,7 @@ Context::Context() {
 Context::~Context() {
 }
 
-Context *Context::context;
+Context *Context::context = 0;
 
 void Context::usage() {
     std::cout << PACKAGE_STRING << std::endl;
@@ -35,7 +35,7 @@ Context *Context::getInstance() {
     return context;
 }
 
-void Context::Init(int argc, char *argv[]) {
+void Context::init(int argc, char *argv[]) {
     if (argc < 4) {
         usage();
         exit(1);

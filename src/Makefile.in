@@ -45,7 +45,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_lconvert_OBJECTS = main.$(OBJEXT) context.$(OBJEXT)
+am_lconvert_OBJECTS = main.$(OBJEXT) context.$(OBJEXT) \
+	luawrapper.$(OBJEXT)
 lconvert_OBJECTS = $(am_lconvert_OBJECTS)
 lconvert_DEPENDENCIES = lua/liblua.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -196,7 +197,9 @@ SUBDIRS = lua
 lconvert_SOURCES = \
 main.cpp \
 context.h \
-context.cpp
+context.cpp \
+luawrapper.h \
+luawrapper.cpp
 
 lconvert_LDADD = lua/liblua.a
 all: all-recursive
@@ -281,6 +284,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luawrapper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .cpp.o:

@@ -1,13 +1,4 @@
-function add(x, y)
-    print("func add", x, y)
-    return x + y
-end
-
 function conv(IN)
---    print(Env["BRANCH"])
---    for k in pairs(IN) do
---        print(k, IN[k])
---    end
     OUT = {}
 
     OUT[1] = IN[2]
@@ -20,19 +11,13 @@ function conv(IN)
     OUT[4] = "fixed_field"
     OUT[5] = 1
 
---    for k in pairs(OUT) do
---        print(k, OUT[k])
---    end
     return OUT
 end
 
 -- test main
--- libconv = package.loadlib(os.getenv("BIPROG_ROOT").."/lib/libconv.so", "luaopen_libconv")()
 --Env = { BRANCH = "GZ" }
 --input = { "15876512577", "Hello", "13560395000" }
 --output = conv(input)
 --for k in pairs(output) do
 --    print(k, output[k])
 --end
-
---print(Env["BRANCH"])
