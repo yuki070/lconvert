@@ -51,6 +51,9 @@ protected:
     std::string _outFile;
     std::string _separator;
     std::map<std::string, std::string> _params;
+
+public:
+    static const char* DEFAULT_SEPARATOR;
 };
 
 #endif /* CONTEXT_H_ */

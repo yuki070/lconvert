@@ -6,5 +6,7 @@ main.cpp \
 context.h \
 context.cpp \
 luawrapper.h \
-luawrapper.cpp
+luawrapper.cpp \
+stringutil.h \
+stringutil.cpp
 lconvert_LDADD = lua/liblua.a

@@ -12,19 +12,7 @@ extern "C" {
 
 #include "context.h"
 #include "luawrapper.h"
-
-std::vector<std::string> split(const std::string& sep, const std::string& str) {
-    std::vector<std::string> v;
-    size_t sep_len = sep.length();
-    size_t p1 = 0;
-    size_t p2 = 0;
-    do {
-        p2 = str.find(sep, p1);
-        v.push_back(str.substr(p1, p2 - p1));
-        p1 = p2 + sep_len;
-    } while (p2 != std::string::npos);
-    return v;
-}
+#include "stringutil.h"
 
 int main(int argc, char *argv[]) {
     try {
@@ -49,7 +37,7 @@ int main(int argc, char *argv[]) {
 
         std::string line;
         while (getline(input, line)) {
-            std::vector<std::string> fields = split(context->getSeparator(), line);
+            std::vector<std::string> fields = stringutil::split(context->getSeparator(), line);
             luaHandler->getGlobal("conv");
             luaHandler->pushTable(fields);
             luaHandler->call(1, 1);

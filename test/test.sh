@@ -1,5 +1,5 @@
 #!/bin/sh
-../src/lconvert ./test.lua ./a ./b -p BRANCH GZ
+../src/lconvert ./test.lua ./a ./b -p "BRANCH=GZ"
 if [ $? -ne 0 ]; then
     echo "FAIL"
     exit 1
