@@ -15,10 +15,18 @@ AC_PROG_RANLIB
 # Checks for libraries.
 
 # Checks for header files.
+AC_CHECK_HEADERS([float.h limits.h locale.h stddef.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+AC_CHECK_TYPES([ptrdiff_t])
 
 # Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MKTIME
+AC_FUNC_REALLOC
+AC_FUNC_STRCOLL
+AC_CHECK_FUNCS([floor memchr setlocale strchr strerror strpbrk strrchr strspn strstr])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
