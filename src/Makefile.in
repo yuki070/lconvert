@@ -45,33 +45,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_lconvert_OBJECTS = lconvert-lapi.$(OBJEXT) lconvert-lcode.$(OBJEXT) \
-	lconvert-lctype.$(OBJEXT) lconvert-ldebug.$(OBJEXT) \
-	lconvert-ldo.$(OBJEXT) lconvert-ldump.$(OBJEXT) \
-	lconvert-lfunc.$(OBJEXT) lconvert-lgc.$(OBJEXT) \
-	lconvert-llex.$(OBJEXT) lconvert-lmem.$(OBJEXT) \
-	lconvert-lobject.$(OBJEXT) lconvert-lopcodes.$(OBJEXT) \
-	lconvert-lparser.$(OBJEXT) lconvert-lstate.$(OBJEXT) \
-	lconvert-lstring.$(OBJEXT) lconvert-ltable.$(OBJEXT) \
-	lconvert-ltm.$(OBJEXT) lconvert-lundump.$(OBJEXT) \
-	lconvert-lvm.$(OBJEXT) lconvert-lzio.$(OBJEXT) \
-	lconvert-lauxlib.$(OBJEXT) lconvert-lbaselib.$(OBJEXT) \
-	lconvert-lbitlib.$(OBJEXT) lconvert-lcorolib.$(OBJEXT) \
-	lconvert-ldblib.$(OBJEXT) lconvert-liolib.$(OBJEXT) \
-	lconvert-lmathlib.$(OBJEXT) lconvert-loslib.$(OBJEXT) \
-	lconvert-lstrlib.$(OBJEXT) lconvert-ltablib.$(OBJEXT) \
-	lconvert-loadlib.$(OBJEXT) lconvert-linit.$(OBJEXT) \
-	lconvert-main.$(OBJEXT)
+am_lconvert_OBJECTS = main.$(OBJEXT)
 lconvert_OBJECTS = $(am_lconvert_OBJECTS)
-lconvert_LDADD = $(LDADD)
+lconvert_DEPENDENCIES = lua/liblua.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -79,9 +59,47 @@ CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
 SOURCES = $(lconvert_SOURCES)
 DIST_SOURCES = $(lconvert_SOURCES)
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
+AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
+	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS \
+	distdir
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+am__relativize = \
+  dir0=`pwd`; \
+  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
+  sed_rest='s,^[^/]*/*,,'; \
+  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
+  sed_butlast='s,/*[^/]*$$,,'; \
+  while test -n "$$dir1"; do \
+    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
+    if test "$$first" != "."; then \
+      if test "$$first" = ".."; then \
+        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
+        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
+      else \
+        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
+        if test "$$first2" = "$$first"; then \
+          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
+        else \
+          dir2="../$$dir2"; \
+        fi; \
+        dir0="$$dir0"/"$$first"; \
+      fi; \
+    fi; \
+    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
+  done; \
+  reldir="$$dir2"
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AUTOCONF = @AUTOCONF@
@@ -170,47 +188,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-EXTRA_DIST = lua
+SUBDIRS = lua
 lconvert_SOURCES = \
-lua/lapi.c \
-lua/lcode.c \
-lua/lctype.c \
-lua/ldebug.c \
-lua/ldo.c \
-lua/ldump.c \
-lua/lfunc.c \
-lua/lgc.c \
-lua/llex.c \
-lua/lmem.c \
-lua/lobject.c \
-lua/lopcodes.c \
-lua/lparser.c \
-lua/lstate.c \
-lua/lstring.c \
-lua/ltable.c \
-lua/ltm.c \
-lua/lundump.c \
-lua/lvm.c \
-lua/lzio.c \
-lua/lauxlib.c \
-lua/lbaselib.c \
-lua/lbitlib.c \
-lua/lcorolib.c \
-lua/ldblib.c \
-lua/liolib.c \
-lua/lmathlib.c \
-lua/loslib.c \
-lua/lstrlib.c \
-lua/ltablib.c \
-lua/loadlib.c \
-lua/linit.c \
 main.cpp
 
-lconvert_CPPFLAGS = -DLUA_COMPAT_ALL -DLUA_ANSI
-all: all-am
+lconvert_LDADD = lua/liblua.a
+all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .c .cpp .o .obj
+.SUFFIXES: .cpp .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -288,501 +274,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lapi.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lauxlib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lbaselib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lbitlib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lcode.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lcorolib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lctype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ldblib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ldebug.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ldo.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ldump.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lfunc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lgc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-linit.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-liolib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-llex.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lmathlib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lmem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-loadlib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lobject.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lopcodes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-loslib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lparser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lstate.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lstring.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lstrlib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ltable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ltablib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-ltm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lundump.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lvm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-lzio.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-main.Po@am__quote@
-
-.c.o:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
-
-.c.obj:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-lconvert-lapi.o: lua/lapi.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lapi.o -MD -MP -MF $(DEPDIR)/lconvert-lapi.Tpo -c -o lconvert-lapi.o `test -f 'lua/lapi.c' || echo '$(srcdir)/'`lua/lapi.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lapi.Tpo $(DEPDIR)/lconvert-lapi.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lapi.c' object='lconvert-lapi.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lapi.o `test -f 'lua/lapi.c' || echo '$(srcdir)/'`lua/lapi.c
-
-lconvert-lapi.obj: lua/lapi.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lapi.obj -MD -MP -MF $(DEPDIR)/lconvert-lapi.Tpo -c -o lconvert-lapi.obj `if test -f 'lua/lapi.c'; then $(CYGPATH_W) 'lua/lapi.c'; else $(CYGPATH_W) '$(srcdir)/lua/lapi.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lapi.Tpo $(DEPDIR)/lconvert-lapi.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lapi.c' object='lconvert-lapi.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lapi.obj `if test -f 'lua/lapi.c'; then $(CYGPATH_W) 'lua/lapi.c'; else $(CYGPATH_W) '$(srcdir)/lua/lapi.c'; fi`
-
-lconvert-lcode.o: lua/lcode.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lcode.o -MD -MP -MF $(DEPDIR)/lconvert-lcode.Tpo -c -o lconvert-lcode.o `test -f 'lua/lcode.c' || echo '$(srcdir)/'`lua/lcode.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lcode.Tpo $(DEPDIR)/lconvert-lcode.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lcode.c' object='lconvert-lcode.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lcode.o `test -f 'lua/lcode.c' || echo '$(srcdir)/'`lua/lcode.c
-
-lconvert-lcode.obj: lua/lcode.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lcode.obj -MD -MP -MF $(DEPDIR)/lconvert-lcode.Tpo -c -o lconvert-lcode.obj `if test -f 'lua/lcode.c'; then $(CYGPATH_W) 'lua/lcode.c'; else $(CYGPATH_W) '$(srcdir)/lua/lcode.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lcode.Tpo $(DEPDIR)/lconvert-lcode.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lcode.c' object='lconvert-lcode.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lcode.obj `if test -f 'lua/lcode.c'; then $(CYGPATH_W) 'lua/lcode.c'; else $(CYGPATH_W) '$(srcdir)/lua/lcode.c'; fi`
-
-lconvert-lctype.o: lua/lctype.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lctype.o -MD -MP -MF $(DEPDIR)/lconvert-lctype.Tpo -c -o lconvert-lctype.o `test -f 'lua/lctype.c' || echo '$(srcdir)/'`lua/lctype.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lctype.Tpo $(DEPDIR)/lconvert-lctype.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lctype.c' object='lconvert-lctype.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lctype.o `test -f 'lua/lctype.c' || echo '$(srcdir)/'`lua/lctype.c
-
-lconvert-lctype.obj: lua/lctype.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lctype.obj -MD -MP -MF $(DEPDIR)/lconvert-lctype.Tpo -c -o lconvert-lctype.obj `if test -f 'lua/lctype.c'; then $(CYGPATH_W) 'lua/lctype.c'; else $(CYGPATH_W) '$(srcdir)/lua/lctype.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lctype.Tpo $(DEPDIR)/lconvert-lctype.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lctype.c' object='lconvert-lctype.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lctype.obj `if test -f 'lua/lctype.c'; then $(CYGPATH_W) 'lua/lctype.c'; else $(CYGPATH_W) '$(srcdir)/lua/lctype.c'; fi`
-
-lconvert-ldebug.o: lua/ldebug.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldebug.o -MD -MP -MF $(DEPDIR)/lconvert-ldebug.Tpo -c -o lconvert-ldebug.o `test -f 'lua/ldebug.c' || echo '$(srcdir)/'`lua/ldebug.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldebug.Tpo $(DEPDIR)/lconvert-ldebug.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldebug.c' object='lconvert-ldebug.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldebug.o `test -f 'lua/ldebug.c' || echo '$(srcdir)/'`lua/ldebug.c
-
-lconvert-ldebug.obj: lua/ldebug.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldebug.obj -MD -MP -MF $(DEPDIR)/lconvert-ldebug.Tpo -c -o lconvert-ldebug.obj `if test -f 'lua/ldebug.c'; then $(CYGPATH_W) 'lua/ldebug.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldebug.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldebug.Tpo $(DEPDIR)/lconvert-ldebug.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldebug.c' object='lconvert-ldebug.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldebug.obj `if test -f 'lua/ldebug.c'; then $(CYGPATH_W) 'lua/ldebug.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldebug.c'; fi`
-
-lconvert-ldo.o: lua/ldo.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldo.o -MD -MP -MF $(DEPDIR)/lconvert-ldo.Tpo -c -o lconvert-ldo.o `test -f 'lua/ldo.c' || echo '$(srcdir)/'`lua/ldo.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldo.Tpo $(DEPDIR)/lconvert-ldo.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldo.c' object='lconvert-ldo.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldo.o `test -f 'lua/ldo.c' || echo '$(srcdir)/'`lua/ldo.c
-
-lconvert-ldo.obj: lua/ldo.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldo.obj -MD -MP -MF $(DEPDIR)/lconvert-ldo.Tpo -c -o lconvert-ldo.obj `if test -f 'lua/ldo.c'; then $(CYGPATH_W) 'lua/ldo.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldo.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldo.Tpo $(DEPDIR)/lconvert-ldo.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldo.c' object='lconvert-ldo.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldo.obj `if test -f 'lua/ldo.c'; then $(CYGPATH_W) 'lua/ldo.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldo.c'; fi`
-
-lconvert-ldump.o: lua/ldump.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldump.o -MD -MP -MF $(DEPDIR)/lconvert-ldump.Tpo -c -o lconvert-ldump.o `test -f 'lua/ldump.c' || echo '$(srcdir)/'`lua/ldump.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldump.Tpo $(DEPDIR)/lconvert-ldump.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldump.c' object='lconvert-ldump.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldump.o `test -f 'lua/ldump.c' || echo '$(srcdir)/'`lua/ldump.c
-
-lconvert-ldump.obj: lua/ldump.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldump.obj -MD -MP -MF $(DEPDIR)/lconvert-ldump.Tpo -c -o lconvert-ldump.obj `if test -f 'lua/ldump.c'; then $(CYGPATH_W) 'lua/ldump.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldump.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldump.Tpo $(DEPDIR)/lconvert-ldump.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldump.c' object='lconvert-ldump.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldump.obj `if test -f 'lua/ldump.c'; then $(CYGPATH_W) 'lua/ldump.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldump.c'; fi`
-
-lconvert-lfunc.o: lua/lfunc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lfunc.o -MD -MP -MF $(DEPDIR)/lconvert-lfunc.Tpo -c -o lconvert-lfunc.o `test -f 'lua/lfunc.c' || echo '$(srcdir)/'`lua/lfunc.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lfunc.Tpo $(DEPDIR)/lconvert-lfunc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lfunc.c' object='lconvert-lfunc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lfunc.o `test -f 'lua/lfunc.c' || echo '$(srcdir)/'`lua/lfunc.c
-
-lconvert-lfunc.obj: lua/lfunc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lfunc.obj -MD -MP -MF $(DEPDIR)/lconvert-lfunc.Tpo -c -o lconvert-lfunc.obj `if test -f 'lua/lfunc.c'; then $(CYGPATH_W) 'lua/lfunc.c'; else $(CYGPATH_W) '$(srcdir)/lua/lfunc.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lfunc.Tpo $(DEPDIR)/lconvert-lfunc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lfunc.c' object='lconvert-lfunc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lfunc.obj `if test -f 'lua/lfunc.c'; then $(CYGPATH_W) 'lua/lfunc.c'; else $(CYGPATH_W) '$(srcdir)/lua/lfunc.c'; fi`
-
-lconvert-lgc.o: lua/lgc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lgc.o -MD -MP -MF $(DEPDIR)/lconvert-lgc.Tpo -c -o lconvert-lgc.o `test -f 'lua/lgc.c' || echo '$(srcdir)/'`lua/lgc.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lgc.Tpo $(DEPDIR)/lconvert-lgc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lgc.c' object='lconvert-lgc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lgc.o `test -f 'lua/lgc.c' || echo '$(srcdir)/'`lua/lgc.c
-
-lconvert-lgc.obj: lua/lgc.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lgc.obj -MD -MP -MF $(DEPDIR)/lconvert-lgc.Tpo -c -o lconvert-lgc.obj `if test -f 'lua/lgc.c'; then $(CYGPATH_W) 'lua/lgc.c'; else $(CYGPATH_W) '$(srcdir)/lua/lgc.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lgc.Tpo $(DEPDIR)/lconvert-lgc.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lgc.c' object='lconvert-lgc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lgc.obj `if test -f 'lua/lgc.c'; then $(CYGPATH_W) 'lua/lgc.c'; else $(CYGPATH_W) '$(srcdir)/lua/lgc.c'; fi`
-
-lconvert-llex.o: lua/llex.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-llex.o -MD -MP -MF $(DEPDIR)/lconvert-llex.Tpo -c -o lconvert-llex.o `test -f 'lua/llex.c' || echo '$(srcdir)/'`lua/llex.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-llex.Tpo $(DEPDIR)/lconvert-llex.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/llex.c' object='lconvert-llex.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-llex.o `test -f 'lua/llex.c' || echo '$(srcdir)/'`lua/llex.c
-
-lconvert-llex.obj: lua/llex.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-llex.obj -MD -MP -MF $(DEPDIR)/lconvert-llex.Tpo -c -o lconvert-llex.obj `if test -f 'lua/llex.c'; then $(CYGPATH_W) 'lua/llex.c'; else $(CYGPATH_W) '$(srcdir)/lua/llex.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-llex.Tpo $(DEPDIR)/lconvert-llex.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/llex.c' object='lconvert-llex.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-llex.obj `if test -f 'lua/llex.c'; then $(CYGPATH_W) 'lua/llex.c'; else $(CYGPATH_W) '$(srcdir)/lua/llex.c'; fi`
-
-lconvert-lmem.o: lua/lmem.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lmem.o -MD -MP -MF $(DEPDIR)/lconvert-lmem.Tpo -c -o lconvert-lmem.o `test -f 'lua/lmem.c' || echo '$(srcdir)/'`lua/lmem.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lmem.Tpo $(DEPDIR)/lconvert-lmem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lmem.c' object='lconvert-lmem.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lmem.o `test -f 'lua/lmem.c' || echo '$(srcdir)/'`lua/lmem.c
-
-lconvert-lmem.obj: lua/lmem.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lmem.obj -MD -MP -MF $(DEPDIR)/lconvert-lmem.Tpo -c -o lconvert-lmem.obj `if test -f 'lua/lmem.c'; then $(CYGPATH_W) 'lua/lmem.c'; else $(CYGPATH_W) '$(srcdir)/lua/lmem.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lmem.Tpo $(DEPDIR)/lconvert-lmem.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lmem.c' object='lconvert-lmem.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lmem.obj `if test -f 'lua/lmem.c'; then $(CYGPATH_W) 'lua/lmem.c'; else $(CYGPATH_W) '$(srcdir)/lua/lmem.c'; fi`
-
-lconvert-lobject.o: lua/lobject.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lobject.o -MD -MP -MF $(DEPDIR)/lconvert-lobject.Tpo -c -o lconvert-lobject.o `test -f 'lua/lobject.c' || echo '$(srcdir)/'`lua/lobject.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lobject.Tpo $(DEPDIR)/lconvert-lobject.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lobject.c' object='lconvert-lobject.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lobject.o `test -f 'lua/lobject.c' || echo '$(srcdir)/'`lua/lobject.c
-
-lconvert-lobject.obj: lua/lobject.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lobject.obj -MD -MP -MF $(DEPDIR)/lconvert-lobject.Tpo -c -o lconvert-lobject.obj `if test -f 'lua/lobject.c'; then $(CYGPATH_W) 'lua/lobject.c'; else $(CYGPATH_W) '$(srcdir)/lua/lobject.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lobject.Tpo $(DEPDIR)/lconvert-lobject.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lobject.c' object='lconvert-lobject.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lobject.obj `if test -f 'lua/lobject.c'; then $(CYGPATH_W) 'lua/lobject.c'; else $(CYGPATH_W) '$(srcdir)/lua/lobject.c'; fi`
-
-lconvert-lopcodes.o: lua/lopcodes.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lopcodes.o -MD -MP -MF $(DEPDIR)/lconvert-lopcodes.Tpo -c -o lconvert-lopcodes.o `test -f 'lua/lopcodes.c' || echo '$(srcdir)/'`lua/lopcodes.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lopcodes.Tpo $(DEPDIR)/lconvert-lopcodes.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lopcodes.c' object='lconvert-lopcodes.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lopcodes.o `test -f 'lua/lopcodes.c' || echo '$(srcdir)/'`lua/lopcodes.c
-
-lconvert-lopcodes.obj: lua/lopcodes.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lopcodes.obj -MD -MP -MF $(DEPDIR)/lconvert-lopcodes.Tpo -c -o lconvert-lopcodes.obj `if test -f 'lua/lopcodes.c'; then $(CYGPATH_W) 'lua/lopcodes.c'; else $(CYGPATH_W) '$(srcdir)/lua/lopcodes.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lopcodes.Tpo $(DEPDIR)/lconvert-lopcodes.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lopcodes.c' object='lconvert-lopcodes.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lopcodes.obj `if test -f 'lua/lopcodes.c'; then $(CYGPATH_W) 'lua/lopcodes.c'; else $(CYGPATH_W) '$(srcdir)/lua/lopcodes.c'; fi`
-
-lconvert-lparser.o: lua/lparser.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lparser.o -MD -MP -MF $(DEPDIR)/lconvert-lparser.Tpo -c -o lconvert-lparser.o `test -f 'lua/lparser.c' || echo '$(srcdir)/'`lua/lparser.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lparser.Tpo $(DEPDIR)/lconvert-lparser.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lparser.c' object='lconvert-lparser.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lparser.o `test -f 'lua/lparser.c' || echo '$(srcdir)/'`lua/lparser.c
-
-lconvert-lparser.obj: lua/lparser.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lparser.obj -MD -MP -MF $(DEPDIR)/lconvert-lparser.Tpo -c -o lconvert-lparser.obj `if test -f 'lua/lparser.c'; then $(CYGPATH_W) 'lua/lparser.c'; else $(CYGPATH_W) '$(srcdir)/lua/lparser.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lparser.Tpo $(DEPDIR)/lconvert-lparser.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lparser.c' object='lconvert-lparser.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lparser.obj `if test -f 'lua/lparser.c'; then $(CYGPATH_W) 'lua/lparser.c'; else $(CYGPATH_W) '$(srcdir)/lua/lparser.c'; fi`
-
-lconvert-lstate.o: lua/lstate.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstate.o -MD -MP -MF $(DEPDIR)/lconvert-lstate.Tpo -c -o lconvert-lstate.o `test -f 'lua/lstate.c' || echo '$(srcdir)/'`lua/lstate.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstate.Tpo $(DEPDIR)/lconvert-lstate.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstate.c' object='lconvert-lstate.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstate.o `test -f 'lua/lstate.c' || echo '$(srcdir)/'`lua/lstate.c
-
-lconvert-lstate.obj: lua/lstate.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstate.obj -MD -MP -MF $(DEPDIR)/lconvert-lstate.Tpo -c -o lconvert-lstate.obj `if test -f 'lua/lstate.c'; then $(CYGPATH_W) 'lua/lstate.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstate.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstate.Tpo $(DEPDIR)/lconvert-lstate.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstate.c' object='lconvert-lstate.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstate.obj `if test -f 'lua/lstate.c'; then $(CYGPATH_W) 'lua/lstate.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstate.c'; fi`
-
-lconvert-lstring.o: lua/lstring.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstring.o -MD -MP -MF $(DEPDIR)/lconvert-lstring.Tpo -c -o lconvert-lstring.o `test -f 'lua/lstring.c' || echo '$(srcdir)/'`lua/lstring.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstring.Tpo $(DEPDIR)/lconvert-lstring.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstring.c' object='lconvert-lstring.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstring.o `test -f 'lua/lstring.c' || echo '$(srcdir)/'`lua/lstring.c
-
-lconvert-lstring.obj: lua/lstring.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstring.obj -MD -MP -MF $(DEPDIR)/lconvert-lstring.Tpo -c -o lconvert-lstring.obj `if test -f 'lua/lstring.c'; then $(CYGPATH_W) 'lua/lstring.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstring.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstring.Tpo $(DEPDIR)/lconvert-lstring.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstring.c' object='lconvert-lstring.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstring.obj `if test -f 'lua/lstring.c'; then $(CYGPATH_W) 'lua/lstring.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstring.c'; fi`
-
-lconvert-ltable.o: lua/ltable.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltable.o -MD -MP -MF $(DEPDIR)/lconvert-ltable.Tpo -c -o lconvert-ltable.o `test -f 'lua/ltable.c' || echo '$(srcdir)/'`lua/ltable.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltable.Tpo $(DEPDIR)/lconvert-ltable.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltable.c' object='lconvert-ltable.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltable.o `test -f 'lua/ltable.c' || echo '$(srcdir)/'`lua/ltable.c
-
-lconvert-ltable.obj: lua/ltable.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltable.obj -MD -MP -MF $(DEPDIR)/lconvert-ltable.Tpo -c -o lconvert-ltable.obj `if test -f 'lua/ltable.c'; then $(CYGPATH_W) 'lua/ltable.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltable.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltable.Tpo $(DEPDIR)/lconvert-ltable.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltable.c' object='lconvert-ltable.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltable.obj `if test -f 'lua/ltable.c'; then $(CYGPATH_W) 'lua/ltable.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltable.c'; fi`
-
-lconvert-ltm.o: lua/ltm.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltm.o -MD -MP -MF $(DEPDIR)/lconvert-ltm.Tpo -c -o lconvert-ltm.o `test -f 'lua/ltm.c' || echo '$(srcdir)/'`lua/ltm.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltm.Tpo $(DEPDIR)/lconvert-ltm.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltm.c' object='lconvert-ltm.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltm.o `test -f 'lua/ltm.c' || echo '$(srcdir)/'`lua/ltm.c
-
-lconvert-ltm.obj: lua/ltm.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltm.obj -MD -MP -MF $(DEPDIR)/lconvert-ltm.Tpo -c -o lconvert-ltm.obj `if test -f 'lua/ltm.c'; then $(CYGPATH_W) 'lua/ltm.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltm.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltm.Tpo $(DEPDIR)/lconvert-ltm.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltm.c' object='lconvert-ltm.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltm.obj `if test -f 'lua/ltm.c'; then $(CYGPATH_W) 'lua/ltm.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltm.c'; fi`
-
-lconvert-lundump.o: lua/lundump.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lundump.o -MD -MP -MF $(DEPDIR)/lconvert-lundump.Tpo -c -o lconvert-lundump.o `test -f 'lua/lundump.c' || echo '$(srcdir)/'`lua/lundump.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lundump.Tpo $(DEPDIR)/lconvert-lundump.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lundump.c' object='lconvert-lundump.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lundump.o `test -f 'lua/lundump.c' || echo '$(srcdir)/'`lua/lundump.c
-
-lconvert-lundump.obj: lua/lundump.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lundump.obj -MD -MP -MF $(DEPDIR)/lconvert-lundump.Tpo -c -o lconvert-lundump.obj `if test -f 'lua/lundump.c'; then $(CYGPATH_W) 'lua/lundump.c'; else $(CYGPATH_W) '$(srcdir)/lua/lundump.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lundump.Tpo $(DEPDIR)/lconvert-lundump.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lundump.c' object='lconvert-lundump.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lundump.obj `if test -f 'lua/lundump.c'; then $(CYGPATH_W) 'lua/lundump.c'; else $(CYGPATH_W) '$(srcdir)/lua/lundump.c'; fi`
-
-lconvert-lvm.o: lua/lvm.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lvm.o -MD -MP -MF $(DEPDIR)/lconvert-lvm.Tpo -c -o lconvert-lvm.o `test -f 'lua/lvm.c' || echo '$(srcdir)/'`lua/lvm.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lvm.Tpo $(DEPDIR)/lconvert-lvm.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lvm.c' object='lconvert-lvm.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lvm.o `test -f 'lua/lvm.c' || echo '$(srcdir)/'`lua/lvm.c
-
-lconvert-lvm.obj: lua/lvm.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lvm.obj -MD -MP -MF $(DEPDIR)/lconvert-lvm.Tpo -c -o lconvert-lvm.obj `if test -f 'lua/lvm.c'; then $(CYGPATH_W) 'lua/lvm.c'; else $(CYGPATH_W) '$(srcdir)/lua/lvm.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lvm.Tpo $(DEPDIR)/lconvert-lvm.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lvm.c' object='lconvert-lvm.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lvm.obj `if test -f 'lua/lvm.c'; then $(CYGPATH_W) 'lua/lvm.c'; else $(CYGPATH_W) '$(srcdir)/lua/lvm.c'; fi`
-
-lconvert-lzio.o: lua/lzio.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lzio.o -MD -MP -MF $(DEPDIR)/lconvert-lzio.Tpo -c -o lconvert-lzio.o `test -f 'lua/lzio.c' || echo '$(srcdir)/'`lua/lzio.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lzio.Tpo $(DEPDIR)/lconvert-lzio.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lzio.c' object='lconvert-lzio.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lzio.o `test -f 'lua/lzio.c' || echo '$(srcdir)/'`lua/lzio.c
-
-lconvert-lzio.obj: lua/lzio.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lzio.obj -MD -MP -MF $(DEPDIR)/lconvert-lzio.Tpo -c -o lconvert-lzio.obj `if test -f 'lua/lzio.c'; then $(CYGPATH_W) 'lua/lzio.c'; else $(CYGPATH_W) '$(srcdir)/lua/lzio.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lzio.Tpo $(DEPDIR)/lconvert-lzio.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lzio.c' object='lconvert-lzio.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lzio.obj `if test -f 'lua/lzio.c'; then $(CYGPATH_W) 'lua/lzio.c'; else $(CYGPATH_W) '$(srcdir)/lua/lzio.c'; fi`
-
-lconvert-lauxlib.o: lua/lauxlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lauxlib.o -MD -MP -MF $(DEPDIR)/lconvert-lauxlib.Tpo -c -o lconvert-lauxlib.o `test -f 'lua/lauxlib.c' || echo '$(srcdir)/'`lua/lauxlib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lauxlib.Tpo $(DEPDIR)/lconvert-lauxlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lauxlib.c' object='lconvert-lauxlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lauxlib.o `test -f 'lua/lauxlib.c' || echo '$(srcdir)/'`lua/lauxlib.c
-
-lconvert-lauxlib.obj: lua/lauxlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lauxlib.obj -MD -MP -MF $(DEPDIR)/lconvert-lauxlib.Tpo -c -o lconvert-lauxlib.obj `if test -f 'lua/lauxlib.c'; then $(CYGPATH_W) 'lua/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lauxlib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lauxlib.Tpo $(DEPDIR)/lconvert-lauxlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lauxlib.c' object='lconvert-lauxlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lauxlib.obj `if test -f 'lua/lauxlib.c'; then $(CYGPATH_W) 'lua/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lauxlib.c'; fi`
-
-lconvert-lbaselib.o: lua/lbaselib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lbaselib.o -MD -MP -MF $(DEPDIR)/lconvert-lbaselib.Tpo -c -o lconvert-lbaselib.o `test -f 'lua/lbaselib.c' || echo '$(srcdir)/'`lua/lbaselib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lbaselib.Tpo $(DEPDIR)/lconvert-lbaselib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lbaselib.c' object='lconvert-lbaselib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lbaselib.o `test -f 'lua/lbaselib.c' || echo '$(srcdir)/'`lua/lbaselib.c
-
-lconvert-lbaselib.obj: lua/lbaselib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lbaselib.obj -MD -MP -MF $(DEPDIR)/lconvert-lbaselib.Tpo -c -o lconvert-lbaselib.obj `if test -f 'lua/lbaselib.c'; then $(CYGPATH_W) 'lua/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lbaselib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lbaselib.Tpo $(DEPDIR)/lconvert-lbaselib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lbaselib.c' object='lconvert-lbaselib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lbaselib.obj `if test -f 'lua/lbaselib.c'; then $(CYGPATH_W) 'lua/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lbaselib.c'; fi`
-
-lconvert-lbitlib.o: lua/lbitlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lbitlib.o -MD -MP -MF $(DEPDIR)/lconvert-lbitlib.Tpo -c -o lconvert-lbitlib.o `test -f 'lua/lbitlib.c' || echo '$(srcdir)/'`lua/lbitlib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lbitlib.Tpo $(DEPDIR)/lconvert-lbitlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lbitlib.c' object='lconvert-lbitlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lbitlib.o `test -f 'lua/lbitlib.c' || echo '$(srcdir)/'`lua/lbitlib.c
-
-lconvert-lbitlib.obj: lua/lbitlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lbitlib.obj -MD -MP -MF $(DEPDIR)/lconvert-lbitlib.Tpo -c -o lconvert-lbitlib.obj `if test -f 'lua/lbitlib.c'; then $(CYGPATH_W) 'lua/lbitlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lbitlib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lbitlib.Tpo $(DEPDIR)/lconvert-lbitlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lbitlib.c' object='lconvert-lbitlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lbitlib.obj `if test -f 'lua/lbitlib.c'; then $(CYGPATH_W) 'lua/lbitlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lbitlib.c'; fi`
-
-lconvert-lcorolib.o: lua/lcorolib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lcorolib.o -MD -MP -MF $(DEPDIR)/lconvert-lcorolib.Tpo -c -o lconvert-lcorolib.o `test -f 'lua/lcorolib.c' || echo '$(srcdir)/'`lua/lcorolib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lcorolib.Tpo $(DEPDIR)/lconvert-lcorolib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lcorolib.c' object='lconvert-lcorolib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lcorolib.o `test -f 'lua/lcorolib.c' || echo '$(srcdir)/'`lua/lcorolib.c
-
-lconvert-lcorolib.obj: lua/lcorolib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lcorolib.obj -MD -MP -MF $(DEPDIR)/lconvert-lcorolib.Tpo -c -o lconvert-lcorolib.obj `if test -f 'lua/lcorolib.c'; then $(CYGPATH_W) 'lua/lcorolib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lcorolib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lcorolib.Tpo $(DEPDIR)/lconvert-lcorolib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lcorolib.c' object='lconvert-lcorolib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lcorolib.obj `if test -f 'lua/lcorolib.c'; then $(CYGPATH_W) 'lua/lcorolib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lcorolib.c'; fi`
-
-lconvert-ldblib.o: lua/ldblib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldblib.o -MD -MP -MF $(DEPDIR)/lconvert-ldblib.Tpo -c -o lconvert-ldblib.o `test -f 'lua/ldblib.c' || echo '$(srcdir)/'`lua/ldblib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldblib.Tpo $(DEPDIR)/lconvert-ldblib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldblib.c' object='lconvert-ldblib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldblib.o `test -f 'lua/ldblib.c' || echo '$(srcdir)/'`lua/ldblib.c
-
-lconvert-ldblib.obj: lua/ldblib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ldblib.obj -MD -MP -MF $(DEPDIR)/lconvert-ldblib.Tpo -c -o lconvert-ldblib.obj `if test -f 'lua/ldblib.c'; then $(CYGPATH_W) 'lua/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldblib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ldblib.Tpo $(DEPDIR)/lconvert-ldblib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ldblib.c' object='lconvert-ldblib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ldblib.obj `if test -f 'lua/ldblib.c'; then $(CYGPATH_W) 'lua/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lua/ldblib.c'; fi`
-
-lconvert-liolib.o: lua/liolib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-liolib.o -MD -MP -MF $(DEPDIR)/lconvert-liolib.Tpo -c -o lconvert-liolib.o `test -f 'lua/liolib.c' || echo '$(srcdir)/'`lua/liolib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-liolib.Tpo $(DEPDIR)/lconvert-liolib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/liolib.c' object='lconvert-liolib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-liolib.o `test -f 'lua/liolib.c' || echo '$(srcdir)/'`lua/liolib.c
-
-lconvert-liolib.obj: lua/liolib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-liolib.obj -MD -MP -MF $(DEPDIR)/lconvert-liolib.Tpo -c -o lconvert-liolib.obj `if test -f 'lua/liolib.c'; then $(CYGPATH_W) 'lua/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lua/liolib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-liolib.Tpo $(DEPDIR)/lconvert-liolib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/liolib.c' object='lconvert-liolib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-liolib.obj `if test -f 'lua/liolib.c'; then $(CYGPATH_W) 'lua/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lua/liolib.c'; fi`
-
-lconvert-lmathlib.o: lua/lmathlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lmathlib.o -MD -MP -MF $(DEPDIR)/lconvert-lmathlib.Tpo -c -o lconvert-lmathlib.o `test -f 'lua/lmathlib.c' || echo '$(srcdir)/'`lua/lmathlib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lmathlib.Tpo $(DEPDIR)/lconvert-lmathlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lmathlib.c' object='lconvert-lmathlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lmathlib.o `test -f 'lua/lmathlib.c' || echo '$(srcdir)/'`lua/lmathlib.c
-
-lconvert-lmathlib.obj: lua/lmathlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lmathlib.obj -MD -MP -MF $(DEPDIR)/lconvert-lmathlib.Tpo -c -o lconvert-lmathlib.obj `if test -f 'lua/lmathlib.c'; then $(CYGPATH_W) 'lua/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lmathlib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lmathlib.Tpo $(DEPDIR)/lconvert-lmathlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lmathlib.c' object='lconvert-lmathlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lmathlib.obj `if test -f 'lua/lmathlib.c'; then $(CYGPATH_W) 'lua/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lmathlib.c'; fi`
-
-lconvert-loslib.o: lua/loslib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-loslib.o -MD -MP -MF $(DEPDIR)/lconvert-loslib.Tpo -c -o lconvert-loslib.o `test -f 'lua/loslib.c' || echo '$(srcdir)/'`lua/loslib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-loslib.Tpo $(DEPDIR)/lconvert-loslib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/loslib.c' object='lconvert-loslib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-loslib.o `test -f 'lua/loslib.c' || echo '$(srcdir)/'`lua/loslib.c
-
-lconvert-loslib.obj: lua/loslib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-loslib.obj -MD -MP -MF $(DEPDIR)/lconvert-loslib.Tpo -c -o lconvert-loslib.obj `if test -f 'lua/loslib.c'; then $(CYGPATH_W) 'lua/loslib.c'; else $(CYGPATH_W) '$(srcdir)/lua/loslib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-loslib.Tpo $(DEPDIR)/lconvert-loslib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/loslib.c' object='lconvert-loslib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-loslib.obj `if test -f 'lua/loslib.c'; then $(CYGPATH_W) 'lua/loslib.c'; else $(CYGPATH_W) '$(srcdir)/lua/loslib.c'; fi`
-
-lconvert-lstrlib.o: lua/lstrlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstrlib.o -MD -MP -MF $(DEPDIR)/lconvert-lstrlib.Tpo -c -o lconvert-lstrlib.o `test -f 'lua/lstrlib.c' || echo '$(srcdir)/'`lua/lstrlib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstrlib.Tpo $(DEPDIR)/lconvert-lstrlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstrlib.c' object='lconvert-lstrlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstrlib.o `test -f 'lua/lstrlib.c' || echo '$(srcdir)/'`lua/lstrlib.c
-
-lconvert-lstrlib.obj: lua/lstrlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-lstrlib.obj -MD -MP -MF $(DEPDIR)/lconvert-lstrlib.Tpo -c -o lconvert-lstrlib.obj `if test -f 'lua/lstrlib.c'; then $(CYGPATH_W) 'lua/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstrlib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-lstrlib.Tpo $(DEPDIR)/lconvert-lstrlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lstrlib.c' object='lconvert-lstrlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-lstrlib.obj `if test -f 'lua/lstrlib.c'; then $(CYGPATH_W) 'lua/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/lstrlib.c'; fi`
-
-lconvert-ltablib.o: lua/ltablib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltablib.o -MD -MP -MF $(DEPDIR)/lconvert-ltablib.Tpo -c -o lconvert-ltablib.o `test -f 'lua/ltablib.c' || echo '$(srcdir)/'`lua/ltablib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltablib.Tpo $(DEPDIR)/lconvert-ltablib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltablib.c' object='lconvert-ltablib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltablib.o `test -f 'lua/ltablib.c' || echo '$(srcdir)/'`lua/ltablib.c
-
-lconvert-ltablib.obj: lua/ltablib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-ltablib.obj -MD -MP -MF $(DEPDIR)/lconvert-ltablib.Tpo -c -o lconvert-ltablib.obj `if test -f 'lua/ltablib.c'; then $(CYGPATH_W) 'lua/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltablib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-ltablib.Tpo $(DEPDIR)/lconvert-ltablib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/ltablib.c' object='lconvert-ltablib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-ltablib.obj `if test -f 'lua/ltablib.c'; then $(CYGPATH_W) 'lua/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lua/ltablib.c'; fi`
-
-lconvert-loadlib.o: lua/loadlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-loadlib.o -MD -MP -MF $(DEPDIR)/lconvert-loadlib.Tpo -c -o lconvert-loadlib.o `test -f 'lua/loadlib.c' || echo '$(srcdir)/'`lua/loadlib.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-loadlib.Tpo $(DEPDIR)/lconvert-loadlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/loadlib.c' object='lconvert-loadlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-loadlib.o `test -f 'lua/loadlib.c' || echo '$(srcdir)/'`lua/loadlib.c
-
-lconvert-loadlib.obj: lua/loadlib.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-loadlib.obj -MD -MP -MF $(DEPDIR)/lconvert-loadlib.Tpo -c -o lconvert-loadlib.obj `if test -f 'lua/loadlib.c'; then $(CYGPATH_W) 'lua/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/loadlib.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-loadlib.Tpo $(DEPDIR)/lconvert-loadlib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/loadlib.c' object='lconvert-loadlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-loadlib.obj `if test -f 'lua/loadlib.c'; then $(CYGPATH_W) 'lua/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lua/loadlib.c'; fi`
-
-lconvert-linit.o: lua/linit.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-linit.o -MD -MP -MF $(DEPDIR)/lconvert-linit.Tpo -c -o lconvert-linit.o `test -f 'lua/linit.c' || echo '$(srcdir)/'`lua/linit.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-linit.Tpo $(DEPDIR)/lconvert-linit.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/linit.c' object='lconvert-linit.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-linit.o `test -f 'lua/linit.c' || echo '$(srcdir)/'`lua/linit.c
-
-lconvert-linit.obj: lua/linit.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lconvert-linit.obj -MD -MP -MF $(DEPDIR)/lconvert-linit.Tpo -c -o lconvert-linit.obj `if test -f 'lua/linit.c'; then $(CYGPATH_W) 'lua/linit.c'; else $(CYGPATH_W) '$(srcdir)/lua/linit.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lconvert-linit.Tpo $(DEPDIR)/lconvert-linit.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/linit.c' object='lconvert-linit.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lconvert-linit.obj `if test -f 'lua/linit.c'; then $(CYGPATH_W) 'lua/linit.c'; else $(CYGPATH_W) '$(srcdir)/lua/linit.c'; fi`
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -798,19 +290,75 @@ lconvert-linit.obj: lua/linit.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-lconvert-main.o: main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-main.o -MD -MP -MF $(DEPDIR)/lconvert-main.Tpo -c -o lconvert-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-main.Tpo $(DEPDIR)/lconvert-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='lconvert-main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@fail= failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
 
-lconvert-main.obj: main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-main.obj -MD -MP -MF $(DEPDIR)/lconvert-main.Tpo -c -o lconvert-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-main.Tpo $(DEPDIR)/lconvert-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='lconvert-main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+$(RECURSIVE_CLEAN_TARGETS):
+	@fail= failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -822,10 +370,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	set x; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -844,7 +405,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	  fi; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -894,22 +455,51 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(MKDIR_P) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	  fi; \
+	done
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
+	    $(am__relativize); \
+	    new_distdir=$$reldir; \
+	    dir1=$$subdir; dir2="$(top_distdir)"; \
+	    $(am__relativize); \
+	    new_top_distdir=$$reldir; \
+	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
+	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
+	    ($(am__cd) $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$new_top_distdir" \
+	        distdir="$$new_distdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+		am__skip_mode_fix=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 check-am: all-am
-check: check-am
+check: check-recursive
 all-am: Makefile $(PROGRAMS)
-installdirs:
+installdirs: installdirs-recursive
+installdirs-am:
 	for dir in "$(DESTDIR)$(bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	if test -z '$(STRIP)'; then \
 	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
@@ -931,91 +521,93 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
 html-am:
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
 install-exec-am: install-binPROGRAMS
 
-install-html: install-html-am
+install-html: install-html-recursive
 
 install-html-am:
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
 install-pdf-am:
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS
 
-.MAKE: install-am install-strip
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
+	install-am install-strip tags-recursive
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic ctags distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-binPROGRAMS
+.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+	all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic ctags ctags-recursive distclean \
+	distclean-compile distclean-generic distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic pdf pdf-am \
+	ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-binPROGRAMS
 
-#lconvert_LDADD = lua/liblua.a
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
