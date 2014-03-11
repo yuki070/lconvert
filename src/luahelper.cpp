@@ -97,6 +97,10 @@ void LuaHelper::PushVector(VectorIterator begin, VectorIterator end) {
     }
 }
 
+void LuaHelper::PushString(const std::string &str) {
+    lua_pushstring(_luaState, str.c_str());
+}
+
 void LuaHelper::PushMap(MapIterator begin, MapIterator end) {
     lua_newtable(_luaState);
     for (MapIterator i = begin; i != end; i++) {
@@ -106,16 +110,14 @@ void LuaHelper::PushMap(MapIterator begin, MapIterator end) {
     }
 }
 
-std::vector<std::string> LuaHelper::PopVector() {
-    std::vector<std::string> result;
+void LuaHelper::PopVector(std::vector<std::string> &vec) {
+    vec.clear();
     size_t tableSize = lua_rawlen(_luaState, -1);
-    result.reserve(tableSize);
     for (int i = 1; i <= tableSize; i++) {
         lua_pushinteger(_luaState, i);
         lua_gettable(_luaState, -2);
-        result.push_back(lua_tostring(_luaState, -1));
+        vec.push_back(lua_tostring(_luaState, -1));
         lua_pop(_luaState, 1);
     }
     lua_pop(_luaState, 1);
-    return result;
 }

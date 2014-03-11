@@ -27,7 +27,7 @@ Context::Context() : _pid(0) {
 Context::~Context() {
 }
 
-const char* Context::DEFAULT_SEPARATOR = "&&";
+const char* Context::DEFAULT_SEPARATOR = "&";
 const char* Context::PARAM_NAME_SEPARATOR = "SEPARATOR";
 const char* Context::STR_EQ = "=";
 

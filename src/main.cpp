@@ -21,7 +21,8 @@ int main(int argc, char *argv[]) {
         logger.WriteFileAndTerminal(
                 std::string(PACKAGE) + "[" + VERSION + "] Script["
                         + context->LuaFilePath() + "] Input["
-                        + context->InputFilePath() + "] -> Start Convert...");
+                        + context->InputFilePath() + "] Separator["
+                        + context->Separator() + "] -> Start Convert...");
 
         LuaHelper lua;
         lua.OpenAllLibs();
@@ -37,25 +38,33 @@ int main(int argc, char *argv[]) {
             throw std::runtime_error(context->OutputFilePath() + ": Open file error.");
         }
 
+        time_t begin, end;
+        size_t convRecords = 0;
+        time(&begin);
         std::string line;
+        std::vector<std::string> outArr;
         while (getline(iStream, line)) {
+            convRecords++;
             std::vector<std::string> fields = stringutil::Split(context->Separator(), line);
             lua.LocateGlobalFunction("conv");
             lua.PushVector(fields.begin(), fields.end());
             lua.Call(1, 1);
             // getResult
-            std::vector<std::string> outArr = lua.PopVector();
+            lua.PopVector(outArr);
             for (size_t i = 0; i < outArr.size(); i++) {
-                oStream << outArr[i];
-                if ((i + 1) != outArr.size()) {
-                    oStream << context->Separator();
-                }
+                oStream << outArr[i] << context->Separator();
+                //if ((i + 1) != outArr.size()) {
+                //    oStream << context->Separator();
+                //}
             }
             oStream << std::endl;
         }
         oStream.close();
         iStream.close();
-        logger.WriteFileAndTerminal(std::string("Convert finish."));
+        time(&end);
+        char msg[128];
+        sprintf(msg, "Convert finish. Time spent %ld sec. Deal with %ld lines.", end - begin, convRecords);
+        logger.WriteFileAndTerminal(msg);
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
         return 1;

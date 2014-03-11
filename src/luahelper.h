@@ -46,8 +46,9 @@ public:
     void LocateGlobalFunction(const std::string &globalSymbol);
     void Call(int nargs, int nresults);
     void PushVector(VectorIterator begin, VectorIterator end);
+    void PushString(const std::string &str);
     void PushMap(MapIterator begin, MapIterator end);
-    std::vector<std::string> PopVector();
+    void PopVector(std::vector<std::string> &vec);
 protected:
     static int panicFunc(lua_State *L);
     lua_State *_luaState;
