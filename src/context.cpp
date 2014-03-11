@@ -12,14 +12,16 @@
 #include "stringutil.h"
 #include "config.h"     // Create by autotools
 
-Context::Context() {
+Context::Context(int argc, char *argv[]){
+    init(argc, argv);
 }
 
 Context::~Context() {
 }
 
 const char* Context::DEFAULT_SEPARATOR = "&&";
-Context *Context::context = 0;
+const char* Context::PARAM_NAME_SEPARATOR = "SEPARATOR";
+const char* Context::STR_EQ = "=";
 
 void Context::usage() {
     std::cout << PACKAGE_STRING << std::endl;
@@ -29,13 +31,6 @@ void Context::usage() {
     std::cout << "-p  Add a custom parameter which is named 'pname' and with value of 'pvalue'." << std::endl;
     std::cout << "    You can add more than one parameter. These parameters will put into a table" << std::endl;
     std::cout << "    (Env) in lua. You can use in lua like thie: Env['pname']. It will return pvalue to you." << std::endl;
-}
-
-Context *Context::getInstance() {
-    if (!context) {
-        context = new Context();
-    }
-    return context;
 }
 
 void Context::init(int argc, char *argv[]) {
@@ -48,22 +43,20 @@ void Context::init(int argc, char *argv[]) {
     _outFile    = argv[3];
     int opt;
     std::vector<std::string> parts;
+    parts.reserve(2);
     while ((opt = getopt(argc, argv, "p:")) != -1) {
         switch (opt) {
         case 'p':
-            std::cout << optind << std::endl;
-            parts = stringutil::split("=", argv[optind - 1]);
-            _params.insert(std::pair<std::string, std::string>(parts[0], parts[1]));
+            parts = stringutil::Split(STR_EQ, argv[optind - 1]);
+            _params.insert(ParamType(parts[0], parts[1]));
             break;
         default:
             usage();
             exit(1);
         }
     }
-    if (_params.find("SEPARATOR") == _params.end()) {
-        _params.insert(
-                std::pair<std::string, std::string>("SEPARATOR",
-                        DEFAULT_SEPARATOR));  // add default separator
+    if (_params.find(PARAM_NAME_SEPARATOR) == _params.end()) {
+        _params.insert(ParamType(PARAM_NAME_SEPARATOR, DEFAULT_SEPARATOR));  // add default separator
     }
-    _separator = _params["SEPARATOR"];
+    _separator = _params[PARAM_NAME_SEPARATOR];
 }

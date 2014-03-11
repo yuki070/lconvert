@@ -13,47 +13,47 @@
 class Context {
 public:
     typedef std::map<std::string, std::string>::const_iterator ParamIterator;
-    static Context *getInstance();
-    void init(int argc, char *argv[]);
+    typedef std::map<std::string, std::string>::value_type ParamType;
+public:
+    static const char* DEFAULT_SEPARATOR;
+    static const char* PARAM_NAME_SEPARATOR;
+    static const char* STR_EQ;
 
-    std::string getLuaFilePath() const {
+    Context(int argc, char *argv[]);
+    virtual ~Context();
+
+    std::string LuaFilePath() const {
         return _luaFile;
     }
 
-    std::string getInputFilePath() const {
+    std::string InputFilePath() const {
         return _inFile;
     }
 
-    std::string getOutputFilePath() const {
+    std::string OutputFilePath() const {
         return _outFile;
     }
 
-    ParamIterator getParamsBegin() const {
+    ParamIterator CustomParamsBegin() const {
         return _params.begin();
     }
 
-    ParamIterator getParamsEnd() const {
+    ParamIterator CustomParamsEnd() const {
         return _params.end();
     }
 
-    std::string getSeparator() const {
+    std::string Separator() const {
         return _separator;
     }
 protected:
+    void init(int argc, char *argv[]);
     static void usage();
-    Context();
-    virtual ~Context();
-
-    static Context *context;
 
     std::string _luaFile;
     std::string _inFile;
     std::string _outFile;
     std::string _separator;
     std::map<std::string, std::string> _params;
-
-public:
-    static const char* DEFAULT_SEPARATOR;
 };
 
 #endif /* CONTEXT_H_ */

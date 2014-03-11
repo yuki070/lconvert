@@ -9,7 +9,7 @@
 
 namespace stringutil {
 
-    std::vector<std::string> split(const std::string& sep, const std::string& str) {
+    std::vector<std::string> Split(const std::string& sep, const std::string& str) {
         std::vector<std::string> v;
         size_t sep_len = sep.length();
         size_t p1 = 0;

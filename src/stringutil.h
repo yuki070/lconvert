@@ -13,7 +13,7 @@
 
 namespace stringutil {
 
-    std::vector<std::string> split(const std::string& sep, const std::string& str);
+    std::vector<std::string> Split(const std::string& sep, const std::string& str);
 
 } /* namespace stringutil */
 #endif /* STRINGUTIL_H_ */
