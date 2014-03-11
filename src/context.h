@@ -8,6 +8,7 @@
 #ifndef CONTEXT_H_
 #define CONTEXT_H_
 
+#include <unistd.h>
 #include <map>
 
 class Context {
@@ -19,8 +20,9 @@ public:
     static const char* PARAM_NAME_SEPARATOR;
     static const char* STR_EQ;
 
-    Context(int argc, char *argv[]);
-    virtual ~Context();
+    static Context *getInstance();
+
+    void Init(int argc, char *argv[]);
 
     std::string LuaFilePath() const {
         return _luaFile;
@@ -45,8 +47,15 @@ public:
     std::string Separator() const {
         return _separator;
     }
+
+    pid_t Pid() const {
+        return _pid;
+    }
 protected:
-    void init(int argc, char *argv[]);
+    Context();
+    virtual ~Context();
+
+    static Context *instance;
     static void usage();
 
     std::string _luaFile;
@@ -54,6 +63,7 @@ protected:
     std::string _outFile;
     std::string _separator;
     std::map<std::string, std::string> _params;
+    pid_t _pid;
 };
 
 #endif /* CONTEXT_H_ */

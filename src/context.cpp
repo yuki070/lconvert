@@ -12,8 +12,16 @@
 #include "stringutil.h"
 #include "config.h"     // Create by autotools
 
-Context::Context(int argc, char *argv[]){
-    init(argc, argv);
+Context *Context::instance = 0;
+
+Context *Context::getInstance() {
+    if (instance == 0) {
+        instance = new Context;
+    }
+    return instance;
+}
+
+Context::Context() : _pid(0) {
 }
 
 Context::~Context() {
@@ -33,7 +41,7 @@ void Context::usage() {
     std::cout << "    (Env) in lua. You can use in lua like thie: Env['pname']. It will return pvalue to you." << std::endl;
 }
 
-void Context::init(int argc, char *argv[]) {
+void Context::Init(int argc, char *argv[]) {
     if (argc < 4) {
         usage();
         exit(1);
@@ -59,4 +67,5 @@ void Context::init(int argc, char *argv[]) {
         _params.insert(ParamType(PARAM_NAME_SEPARATOR, DEFAULT_SEPARATOR));  // add default separator
     }
     _separator = _params[PARAM_NAME_SEPARATOR];
+    _pid = getpid();
 }

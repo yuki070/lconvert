@@ -45,10 +45,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_lconvert_OBJECTS = main.$(OBJEXT) context.$(OBJEXT) \
-	luahelper.$(OBJEXT) stringutil.$(OBJEXT)
+am_lconvert_OBJECTS = lconvert-main.$(OBJEXT) \
+	lconvert-context.$(OBJEXT) lconvert-luahelper.$(OBJEXT) \
+	lconvert-stringutil.$(OBJEXT) lconvert-logger.$(OBJEXT)
 lconvert_OBJECTS = $(am_lconvert_OBJECTS)
 lconvert_DEPENDENCIES = lua/liblua.a
+lconvert_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+	$(lconvert_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -204,8 +207,12 @@ context.cpp \
 luahelper.h \
 luahelper.cpp \
 stringutil.h \
-stringutil.cpp
+stringutil.cpp \
+logger.h \
+logger.cpp
 
+lconvert_CPPFLAGS = -I$(BIPROG_ROOT)/include
+lconvert_LDFLAGS = -L$(BIPROG_ROOT)/lib
 lconvert_LDADD = lua/liblua.a
 all: all-recursive
 
@@ -280,7 +287,7 @@ clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 lconvert$(EXEEXT): $(lconvert_OBJECTS) $(lconvert_DEPENDENCIES) $(EXTRA_lconvert_DEPENDENCIES) 
 	@rm -f lconvert$(EXEEXT)
-	$(CXXLINK) $(lconvert_OBJECTS) $(lconvert_LDADD) $(LIBS)
+	$(lconvert_LINK) $(lconvert_OBJECTS) $(lconvert_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -288,10 +295,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luahelper.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringutil.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-context.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-logger.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-luahelper.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lconvert-stringutil.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -306,6 +314,76 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+lconvert-main.o: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-main.o -MD -MP -MF $(DEPDIR)/lconvert-main.Tpo -c -o lconvert-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-main.Tpo $(DEPDIR)/lconvert-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='lconvert-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+
+lconvert-main.obj: main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-main.obj -MD -MP -MF $(DEPDIR)/lconvert-main.Tpo -c -o lconvert-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-main.Tpo $(DEPDIR)/lconvert-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cpp' object='lconvert-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+
+lconvert-context.o: context.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-context.o -MD -MP -MF $(DEPDIR)/lconvert-context.Tpo -c -o lconvert-context.o `test -f 'context.cpp' || echo '$(srcdir)/'`context.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-context.Tpo $(DEPDIR)/lconvert-context.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='context.cpp' object='lconvert-context.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-context.o `test -f 'context.cpp' || echo '$(srcdir)/'`context.cpp
+
+lconvert-context.obj: context.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-context.obj -MD -MP -MF $(DEPDIR)/lconvert-context.Tpo -c -o lconvert-context.obj `if test -f 'context.cpp'; then $(CYGPATH_W) 'context.cpp'; else $(CYGPATH_W) '$(srcdir)/context.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-context.Tpo $(DEPDIR)/lconvert-context.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='context.cpp' object='lconvert-context.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-context.obj `if test -f 'context.cpp'; then $(CYGPATH_W) 'context.cpp'; else $(CYGPATH_W) '$(srcdir)/context.cpp'; fi`
+
+lconvert-luahelper.o: luahelper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-luahelper.o -MD -MP -MF $(DEPDIR)/lconvert-luahelper.Tpo -c -o lconvert-luahelper.o `test -f 'luahelper.cpp' || echo '$(srcdir)/'`luahelper.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-luahelper.Tpo $(DEPDIR)/lconvert-luahelper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='luahelper.cpp' object='lconvert-luahelper.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-luahelper.o `test -f 'luahelper.cpp' || echo '$(srcdir)/'`luahelper.cpp
+
+lconvert-luahelper.obj: luahelper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-luahelper.obj -MD -MP -MF $(DEPDIR)/lconvert-luahelper.Tpo -c -o lconvert-luahelper.obj `if test -f 'luahelper.cpp'; then $(CYGPATH_W) 'luahelper.cpp'; else $(CYGPATH_W) '$(srcdir)/luahelper.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-luahelper.Tpo $(DEPDIR)/lconvert-luahelper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='luahelper.cpp' object='lconvert-luahelper.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-luahelper.obj `if test -f 'luahelper.cpp'; then $(CYGPATH_W) 'luahelper.cpp'; else $(CYGPATH_W) '$(srcdir)/luahelper.cpp'; fi`
+
+lconvert-stringutil.o: stringutil.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-stringutil.o -MD -MP -MF $(DEPDIR)/lconvert-stringutil.Tpo -c -o lconvert-stringutil.o `test -f 'stringutil.cpp' || echo '$(srcdir)/'`stringutil.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-stringutil.Tpo $(DEPDIR)/lconvert-stringutil.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stringutil.cpp' object='lconvert-stringutil.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-stringutil.o `test -f 'stringutil.cpp' || echo '$(srcdir)/'`stringutil.cpp
+
+lconvert-stringutil.obj: stringutil.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-stringutil.obj -MD -MP -MF $(DEPDIR)/lconvert-stringutil.Tpo -c -o lconvert-stringutil.obj `if test -f 'stringutil.cpp'; then $(CYGPATH_W) 'stringutil.cpp'; else $(CYGPATH_W) '$(srcdir)/stringutil.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-stringutil.Tpo $(DEPDIR)/lconvert-stringutil.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stringutil.cpp' object='lconvert-stringutil.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-stringutil.obj `if test -f 'stringutil.cpp'; then $(CYGPATH_W) 'stringutil.cpp'; else $(CYGPATH_W) '$(srcdir)/stringutil.cpp'; fi`
+
+lconvert-logger.o: logger.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-logger.o -MD -MP -MF $(DEPDIR)/lconvert-logger.Tpo -c -o lconvert-logger.o `test -f 'logger.cpp' || echo '$(srcdir)/'`logger.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-logger.Tpo $(DEPDIR)/lconvert-logger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='logger.cpp' object='lconvert-logger.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-logger.o `test -f 'logger.cpp' || echo '$(srcdir)/'`logger.cpp
+
+lconvert-logger.obj: logger.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT lconvert-logger.obj -MD -MP -MF $(DEPDIR)/lconvert-logger.Tpo -c -o lconvert-logger.obj `if test -f 'logger.cpp'; then $(CYGPATH_W) 'logger.cpp'; else $(CYGPATH_W) '$(srcdir)/logger.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/lconvert-logger.Tpo $(DEPDIR)/lconvert-logger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='logger.cpp' object='lconvert-logger.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lconvert_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o lconvert-logger.obj `if test -f 'logger.cpp'; then $(CYGPATH_W) 'logger.cpp'; else $(CYGPATH_W) '$(srcdir)/logger.cpp'; fi`
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.

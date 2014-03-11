@@ -28,6 +28,11 @@ AC_FUNC_REALLOC
 AC_FUNC_STRCOLL
 AC_CHECK_FUNCS([floor memchr setlocale strchr strerror strpbrk strrchr strspn strstr])
 
+AC_ARG_ENABLE(log4cpp, 
+                [  --enable-log4cpp    turn on log4cpp],
+                [CPPFLAGS="-D_HAS_LOG4CPP"; LIBS="-llogger -llog4cpp"],
+                [])
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/lua/Makefile

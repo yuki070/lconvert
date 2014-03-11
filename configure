@@ -700,6 +700,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_dependency_tracking
+enable_log4cpp
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1331,6 +1332,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
+  --enable-log4cpp    turn on log4cpp
 
 Some influential environment variables:
   CC          C compiler command
@@ -5082,6 +5084,12 @@ _ACEOF
 
 fi
 done
+
+
+# Check whether --enable-log4cpp was given.
+if test "${enable_log4cpp+set}" = set; then :
+  enableval=$enable_log4cpp; CPPFLAGS="-D_HAS_LOG4CPP"; LIBS="-llogger -llog4cpp"
+fi
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile src/lua/Makefile test/Makefile"
